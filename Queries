@@ -8,7 +8,6 @@ WHERE a.is_group = 0
   AND YEAR(s.single_release_date) BETWEEN 2015 AND 2020
 GROUP BY a.artist_id
 ORDER BY num_singles DESC, a.name ASC
-LIMIT 10;
 
 -- Which artists released their last single in 2020?
 
@@ -26,7 +25,6 @@ FROM Genre g
 JOIN Song_genre sg ON g.genre_id = sg.genre_id
 GROUP BY g.genre_id
 ORDER BY num_songs DESC, g.name ASC
-LIMIT 10;
 
 --Which artists have released both albums and singles?
 
@@ -48,7 +46,6 @@ JOIN Artist ar ON s.artist_id = ar.artist_id
 WHERE YEAR(r.rating_date) BETWEEN 2020 AND 2021
 GROUP BY s.song_id
 ORDER BY num_ratings DESC, s.title ASC
-LIMIT 10;
 
 --Which users rated the most songs between 2020 and 2021?
 
@@ -58,6 +55,5 @@ JOIN Rating r ON u.username = r.username
 WHERE YEAR(r.rating_date) BETWEEN 2020 AND 2021
 GROUP BY u.username
 ORDER BY num_ratings DESC, u.username ASC
-LIMIT 10;
 
 

@@ -1,0 +1,63 @@
+-- Which individual artists released the most singles between 2015 and 2020?
+
+SELECT a.name, COUNT(s.song_id) AS num_singles
+FROM Artist a
+JOIN Song s ON a.artist_id = s.artist_id
+WHERE a.is_group = 0
+  AND s.album_id IS NULL
+  AND YEAR(s.single_release_date) BETWEEN 2015 AND 2020
+GROUP BY a.artist_id
+ORDER BY num_singles DESC, a.name ASC
+LIMIT 10;
+
+-- Which artists released their last single in 2020?
+
+SELECT a.name
+FROM Artist a
+JOIN Song s ON a.artist_id = s.artist_id
+WHERE s.album_id IS NULL
+GROUP BY a.artist_id
+HAVING MAX(YEAR(s.single_release_date)) = 2020;
+
+-- Which genres have the most songs in the database?
+
+SELECT g.name AS genre, COUNT(sg.song_id) AS num_songs
+FROM Genre g
+JOIN Song_genre sg ON g.genre_id = sg.genre_id
+GROUP BY g.genre_id
+ORDER BY num_songs DESC, g.name ASC
+LIMIT 10;
+
+--Which artists have released both albums and singles?
+
+SELECT a.name
+FROM Artist a
+WHERE a.artist_id IN (
+    SELECT DISTINCT artist_id FROM Album
+)
+AND a.artist_id IN (
+    SELECT DISTINCT artist_id FROM Song WHERE album_id IS NULL
+);
+
+--Which songs received the most ratings between 2020 and 2021?
+
+SELECT s.title, ar.name AS artist, COUNT(r.rating) AS num_ratings
+FROM Rating r
+JOIN Song s ON r.song_id = s.song_id
+JOIN Artist ar ON s.artist_id = ar.artist_id
+WHERE YEAR(r.rating_date) BETWEEN 2020 AND 2021
+GROUP BY s.song_id
+ORDER BY num_ratings DESC, s.title ASC
+LIMIT 10;
+
+--Which users rated the most songs between 2020 and 2021?
+
+SELECT u.username, COUNT(r.song_id) AS num_ratings
+FROM User u
+JOIN Rating r ON u.username = r.username
+WHERE YEAR(r.rating_date) BETWEEN 2020 AND 2021
+GROUP BY u.username
+ORDER BY num_ratings DESC, u.username ASC
+LIMIT 10;
+
+
